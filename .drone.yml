@@ -8,9 +8,6 @@ platform:
 trigger:
   event:
     - push
-  branch:
-    exclude:
-      - master
 
 environment:
   REGISTRY_GROUP: smashedr
@@ -18,6 +15,10 @@ environment:
 steps:
   - name: "Dev Deploy"
     image: ubuntu:latest
+    when:
+      branch:
+        exclude:
+          - master
     commands:
       - echo REGISTRY_GROUP0 $REGISTRY_GROUP
       - echo REGISTRY_GROUP2 $${REGISTRY_GROUP}
