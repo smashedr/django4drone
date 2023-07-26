@@ -21,11 +21,13 @@ steps:
       - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
       - echo ENV_NAME $${ENV_NAME}
       - echo "ENV_NAME=$${ENV_NAME}" >> .environment
+      - ls -l
 
   - name: "Service Configs"
     image: alpine/git
     commands:
-      - set -a; source .environment
+      - ls -l
+      - set -a; . .environment
       - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
       - echo ENV_NAME $${ENV_NAME}
 #      - cd service-configs
@@ -42,6 +44,7 @@ steps:
         exclude:
           - master
     commands:
+      - ls -l
       - set -a; . .environment
       - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
       - echo ENV_NAME $${ENV_NAME}
