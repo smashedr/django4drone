@@ -1,0 +1,29 @@
+{% extends "main.html" %}
+{% load home_tags %}
+{% load cache %}
+{% block news_active %}active{% endblock %}
+{% block title %}News{% endblock %}
+
+{% block head %}{% endblock %}
+
+{% block body %}
+{% cache 86400 news_body %}
+
+    <h1>News</h1>
+    {% if request.user.is_superuser %}
+        <p>You can add/edit My News from the
+            <a class="text-warning" href="{% url 'admin:index' %}">Admin Panel</a>.</p>
+    {% endif %}
+    {% if news %}
+        {% for news in news %}
+            {% include 'include/news.html' with news=news %}
+            <br>
+        {% endfor %}
+    {% else %}
+        <p>No News! (Is Good News?)</p>
+    {% endif %}
+
+{% endcache %}
+{% endblock %}
+
+{% block tail %}{% endblock %}

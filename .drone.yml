@@ -1,0 +1,30 @@
+---
+kind: pipeline
+name: deploy
+
+platform:
+  arch: arm64
+
+trigger:
+  event:
+    - push
+  branch:
+    exclude:
+      - master
+
+environment:
+  REGISTRY_GROUP: smashedr
+  REGISTRY_HOST: registry.hosted-domains.com
+  COMPOSE_FILE: docker-compose-swarm.yaml
+  SERVICE_CONFIGS: hosted-domains/service-configs
+  CONFIG_FILE: settings.env
+  ENV_NAME: xxx
+  TRAEFIK_HOST: xxx
+
+steps:
+  - name: deploy
+    image: ubuntu:latest
+    commands:
+      - echo ${REGISTRY_GROUP}
+      - ls -lR .
+
