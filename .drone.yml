@@ -1,6 +1,6 @@
 ---
 kind: pipeline
-name: deploy
+name: "Deploy"
 
 platform:
   arch: arm64
@@ -8,22 +8,26 @@ platform:
 trigger:
   event:
     - push
-  branch:
-    exclude:
-      - master
 
 environment:
   REGISTRY_GROUP: smashedr
-  REGISTRY_HOST: registry.hosted-domains.com
-  COMPOSE_FILE: docker-compose-swarm.yaml
-  SERVICE_CONFIGS: hosted-domains/service-configs
-  CONFIG_FILE: settings.env
-  ENV_NAME: xxx
-  TRAEFIK_HOST: xxx
 
 steps:
-  - name: deploy
+  - name: "Dev Deploy"
     image: ubuntu:latest
+    when:
+      branch:
+        exclude:
+          - master
     commands:
-      - echo ${REGISTRY_GROUP}
-      - ls -lR .
+      - echo REGISTRY_GROUP0 $REGISTRY_GROUP
+      - echo REGISTRY_GROUP2 $${REGISTRY_GROUP}
+
+  - name: "Prod Deploy"
+    image: ubuntu:latest
+    when:
+      event:
+        - promote
+    commands:
+      - echo REGISTRY_GROUP0 $REGISTRY_GROUP
+      - echo REGISTRY_GROUP2 $${REGISTRY_GROUP}
