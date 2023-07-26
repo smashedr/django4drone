@@ -1,6 +1,6 @@
 ---
 kind: pipeline
-name: deploy
+name: "Deploy"
 
 platform:
   arch: arm64
@@ -14,25 +14,21 @@ trigger:
 
 environment:
   REGISTRY_GROUP: smashedr
-  REGISTRY_HOST: registry.hosted-domains.com
-  COMPOSE_FILE: docker-compose-swarm.yaml
-  SERVICE_CONFIGS: hosted-domains/service-configs
-  CONFIG_FILE: settings.env
-  ENV_NAME: xxx
-  TRAEFIK_HOST: xxx
 
 steps:
-  - name: "Auto Deploy"
+  - name: "Dev Deploy"
     image: ubuntu:latest
     commands:
-      - "echo REGISTRY_GROUP1: ${REGISTRY_GROUP}"
-      - "echo REGISTRY_GROUP2: $${REGISTRY_GROUP}"
+      - echo REGISTRY_GROUP0 $REGISTRY_GROUP
+      - echo REGISTRY_GROUP1 ${REGISTRY_GROUP}
+      - echo REGISTRY_GROUP2 $${REGISTRY_GROUP}
 
   - name: "Prod Deploy"
-    image: plugins/ssh
+    image: ubuntu:latest
     when:
       event:
         - promote
     commands:
-      - "echo REGISTRY_GROUP1: ${REGISTRY_GROUP}"
-      - "echo REGISTRY_GROUP2: $${REGISTRY_GROUP}"
+      - echo REGISTRY_GROUP0 $REGISTRY_GROUP
+      - echo REGISTRY_GROUP1 ${REGISTRY_GROUP}
+      - echo REGISTRY_GROUP2 $${REGISTRY_GROUP}
