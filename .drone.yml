@@ -25,7 +25,8 @@ steps:
   - name: "Auto Deploy"
     image: ubuntu:latest
     commands:
-      - echo $${REGISTRY_GROUP}
+      - echo REGISTRY_GROUP1: ${REGISTRY_GROUP}
+      - echo REGISTRY_GROUP2: $${REGISTRY_GROUP}
 
   - name: "Prod Deploy"
     image: plugins/ssh
@@ -33,4 +34,5 @@ steps:
       event:
         - promote
     commands:
-      - echo $${REGISTRY_GROUP}
+      - echo REGISTRY_GROUP1: ${REGISTRY_GROUP}
+      - echo REGISTRY_GROUP2: $${REGISTRY_GROUP}
