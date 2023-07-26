@@ -17,8 +17,6 @@ steps:
   - name: "Deploy"
     image: ubuntu:latest
     when:
-      event:
-        - promote
       branch:
         exclude:
           - master
