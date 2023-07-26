@@ -27,4 +27,3 @@ steps:
     commands:
       - echo ${REGISTRY_GROUP}
       - ls -lR .
-
