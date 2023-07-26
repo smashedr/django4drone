@@ -36,12 +36,15 @@ steps:
 #      - git pull origin master
 
   - name: "Dev Deploy"
-    image: ubuntu
+    image: ubuntu:latest
     when:
       branch:
         exclude:
           - master
+    environment:
+      SHELL: /bin/bash
     commands:
+      - echo $SHELL
       - set -a; source .environment
       - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
       - echo ENV_NAME $${ENV_NAME}
@@ -54,13 +57,14 @@ steps:
       - echo DRONE_REPO_LINK $${DRONE_REPO_LINK}
 
   - name: "Prod Deploy"
-    image: ubuntu
+    image: ubuntu:latest
     when:
       event:
         - promote
     commands:
       - set -a; source .environment
       - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
+      - echo ENV_NAME $${ENV_NAME}
       - echo ----------
       - echo DRONE_REPO $${DRONE_REPO}
       - echo DRONE_REPO_NAME $${DRONE_REPO_NAME}
