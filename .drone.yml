@@ -22,8 +22,15 @@ environment:
   TRAEFIK_HOST: xxx
 
 steps:
-  - name: deploy
+  - name: "Auto Deploy"
     image: ubuntu:latest
     commands:
-      - echo ${REGISTRY_GROUP}
-      - ls -lR .
+      - echo $${REGISTRY_GROUP}
+
+  - name: "Prod Deploy"
+    image: plugins/ssh
+    when:
+      event:
+        - promote
+    commands:
+      - echo $${REGISTRY_GROUP}
