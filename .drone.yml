@@ -8,6 +8,7 @@ platform:
 trigger:
   event:
     - push
+    - promote
 
 environment:
   REGISTRY_GROUP: smashedr
