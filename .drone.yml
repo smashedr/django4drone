@@ -20,6 +20,8 @@ steps:
       branch:
         exclude:
           - master
+      event:
+        - promote
     commands:
       - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
       - echo ----------
