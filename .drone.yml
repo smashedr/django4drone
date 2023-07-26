@@ -41,11 +41,8 @@ steps:
       branch:
         exclude:
           - master
-    environment:
-      SHELL: /bin/bash
     commands:
-      - echo $${SHELL}
-      - set -a; source .environment
+      - set -a; . .environment
       - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
       - echo ENV_NAME $${ENV_NAME}
       - echo ----------
@@ -62,7 +59,6 @@ steps:
 #      event:
 #        - promote
 #    commands:
-#      - echo $${SHELL}
 #      - set -a; source .environment
 #      - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
 #      - echo ENV_NAME $${ENV_NAME}
