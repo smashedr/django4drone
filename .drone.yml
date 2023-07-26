@@ -20,7 +20,6 @@ steps:
     image: ubuntu:latest
     commands:
       - echo REGISTRY_GROUP0 $REGISTRY_GROUP
-      - echo REGISTRY_GROUP1 ${REGISTRY_GROUP}
       - echo REGISTRY_GROUP2 $${REGISTRY_GROUP}
 
   - name: "Prod Deploy"
@@ -30,5 +29,4 @@ steps:
         - promote
     commands:
       - echo REGISTRY_GROUP0 $REGISTRY_GROUP
-      - echo REGISTRY_GROUP1 ${REGISTRY_GROUP}
       - echo REGISTRY_GROUP2 $${REGISTRY_GROUP}
