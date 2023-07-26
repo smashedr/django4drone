@@ -20,12 +20,12 @@ steps:
       - export ENV_NAME=$(if [ "${DRONE_DEPLOY_TO}" == "prod" ];then echo 'prod';else echo 'dev';fi)
       - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
       - echo ENV_NAME $${ENV_NAME}
-    environment:
-      ENV_NAME: $${ENV_NAME}
+      - echo "ENV_NAME=$${ENV_NAME}" >> .environment
 
   - name: "Service Configs"
     image: alpine/git
     commands:
+      - set -a; source .environment
       - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
       - echo ENV_NAME $${ENV_NAME}
 #      - cd service-configs
@@ -42,6 +42,7 @@ steps:
         exclude:
           - master
     commands:
+      - set -a; source .environment
       - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
       - echo ENV_NAME $${ENV_NAME}
       - echo ----------
@@ -58,6 +59,7 @@ steps:
       event:
         - promote
     commands:
+      - set -a; source .environment
       - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
       - echo ----------
       - echo DRONE_REPO $${DRONE_REPO}
