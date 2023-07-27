@@ -50,11 +50,9 @@ steps:
       - git config core.sparseCheckout true
       - echo "services/$DRONE_REPO_OWNER/$DRONE_REPO_NAME/$ENV_NAME/$CONFIG_FILE" >> .git/info/sparse-checkout
       - git pull origin master
+      - echo  "CONFIG_FILE=service-configs/services/$DRONE_REPO_OWNER/$DRONE_REPO_NAME/$ENV_NAME/$CONFIG_FILE" >> ./.environment
       - echo ----------
-      - pwd
-      - ls
-      - cat .git/info/sparse-checkout
-      - #cat "services/$DRONE_REPO_OWNER/$DRONE_REPO_NAME/$ENV_NAME/$CONFIG_FILE"
+      - cat "services/$DRONE_REPO_OWNER/$DRONE_REPO_NAME/$ENV_NAME/$CONFIG_FILE"
 
   - name: "Dev Deploy"
     image: ubuntu:latest
@@ -67,6 +65,7 @@ steps:
       - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
       - echo ENV_NAME $${ENV_NAME}
       - echo TRAEFIK_HOST $${TRAEFIK_HOST}
+      - echo CONFIG_FILE $${CONFIG_FILE}
       - echo ----------
       - echo DRONE_REPO $${DRONE_REPO}
       - echo DRONE_REPO_NAME $${DRONE_REPO_NAME}
@@ -77,7 +76,7 @@ steps:
       - echo ----------
       - ls -la
       - echo ----------
-      - ls -lah service-configs
+      - ls -lahR service-configs/services
 
 #  - name: "Prod Deploy"
 #    image: ubuntu:latest
