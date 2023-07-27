@@ -17,6 +17,10 @@ environment:
   SERVICE_CONFIGS: git@github.com:hosted-domains/service-configs.git
   CONFIG_FILE: settings.env
 
+volumes:
+  - name: docker-sock
+    path: /var/run/docker.sock
+
 steps:
   - name: "Variables"
     image: docker:dind
@@ -90,6 +94,7 @@ steps:
       - sed -i "s/STACK_NAME/$${STACK_NAME}/g" $${COMPOSE_FILE}
       - cat $${COMPOSE_FILE}
       - echo ----------
+      - stat /var/run/docker.sock
       - docker info
 #      - docker compose -f $${COMPOSE_FILE} build --force-rm
 #      - docker login --username '$${REGISTRY_USER}' --password '$${REGISTRY_PASS}' $${REGISTRY_HOST}
