@@ -27,14 +27,14 @@ steps:
     image: docker:dind
     commands:
       - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
+      - echo ----------
       - export ENV_NAME=$(if [ "$DRONE_DEPLOY_TO" = prod ];then echo 'prod';else echo 'dev';fi)
-      - echo ENV_NAME $${ENV_NAME}
       - echo "ENV_NAME=$${ENV_NAME}" >> ./.environment
       - export TRAEFIK_HOST=$(if [ "$DRONE_DEPLOY_TO" = prod ];then echo 'prod-test.cssnr.com';else echo 'dev-test.cssnr.com';fi)
-      - echo TRAEFIK_HOST $${TRAEFIK_HOST}
       - echo "TRAEFIK_HOST=$${TRAEFIK_HOST}" >> ./.environment
-      - echo "STACK_NAME=$${ENV_NAME}_$${DRONE_REPO_OWNER}_$${DRONE_REPO_NAME}" >> ./.environment
       - echo "VERSION=$DRONE_REPO_BRANCH" >> ./.environment
+      - echo "STACK_NAME=$${ENV_NAME}_$${DRONE_REPO_OWNER}_$${DRONE_REPO_NAME}" >> ./.environment
+      - echo  "ENV_FILE=service-configs/services/$DRONE_REPO_OWNER/$DRONE_REPO_NAME/$ENV_NAME/$CONFIG_FILE" >> ./.environment
 
   - name: "Service Configs"
     image: alpine/git
@@ -59,9 +59,6 @@ steps:
       - git config core.sparseCheckout true
       - echo "services/$DRONE_REPO_OWNER/$DRONE_REPO_NAME/$ENV_NAME/$CONFIG_FILE" >> .git/info/sparse-checkout
       - git pull origin master
-      - echo  "CONFIG_PATH=service-configs/services/$DRONE_REPO_OWNER/$DRONE_REPO_NAME/$ENV_NAME/$CONFIG_FILE" >> ./.environment
-      - echo ----------
-      - cat "services/$DRONE_REPO_OWNER/$DRONE_REPO_NAME/$ENV_NAME/$CONFIG_FILE"
 
   - name: "Dev Deploy"
     image: docker:dind
@@ -84,19 +81,16 @@ steps:
       - echo TRAEFIK_HOST $${TRAEFIK_HOST}
       - echo STACK_NAME $${STACK_NAME}
       - echo VERSION $${VERSION}
-      - echo CONFIG_PATH $${CONFIG_PATH}
+      - echo ENV_FILE $${ENV_FILE}
       - echo ----------
       - echo REGISTRY_HOST $${REGISTRY_HOST}
       - echo COMPOSE_FILE $${COMPOSE_FILE}
       - echo ----------
-      - export ENV_FILE=$${CONFIG_PATH}
-      - echo ENV_FILE $${ENV_FILE}
-      - echo ----------
       - sed -i "s/STACK_NAME/$${STACK_NAME}/g" $${COMPOSE_FILE}
       - cat $${COMPOSE_FILE}
       - echo ----------
-#      - docker compose -f $${COMPOSE_FILE} build --force-rm
-#      - docker login --username '$${REGISTRY_USER}' --password '$${REGISTRY_PASS}' $${REGISTRY_HOST}
+      - docker compose -f $${COMPOSE_FILE} build --force-rm
+      - docker login --username '$${REGISTRY_USER}' --password '$${REGISTRY_PASS}' $${REGISTRY_HOST}
 #      - docker compose -f $${COMPOSE_FILE} push
 #      - docker stack deploy -c $${COMPOSE_FILE} --with-registry-auth --resolve-image always $${STACK_NAME}
 
