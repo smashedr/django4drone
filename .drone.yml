@@ -45,6 +45,7 @@ steps:
       - echo ----------
       - ls -lah
       - echo ----------
+      - mkdir service-configs
       - cd service-configs
       - git init
       - git remote add origin $${SERVICE_CONFIGS}
