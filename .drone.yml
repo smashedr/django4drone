@@ -60,6 +60,14 @@ steps:
       - echo "services/$DRONE_REPO_OWNER/$DRONE_REPO_NAME/$ENV_NAME/$CONFIG_FILE" >> .git/info/sparse-checkout
       - git pull origin master
 
+  - name: "Update Compose"
+    image: ubuntu
+    commands:
+      - set -a; . ./.environment
+      - sed -i "s/STACK_NAME/$${STACK_NAME}/g" $${COMPOSE_FILE}
+      - echo ----------
+      - cat $${COMPOSE_FILE}
+
   - name: "Dev Deploy"
     image: docker:dind
     volumes:
@@ -82,20 +90,14 @@ steps:
       - echo STACK_NAME $${STACK_NAME}
       - echo VERSION $${VERSION}
       - echo ENV_FILE $${ENV_FILE}
-      - echo ----------
-      - echo REGISTRY_HOST $${REGISTRY_HOST}
       - echo COMPOSE_FILE $${COMPOSE_FILE}
-      - echo ----------
-      - sed -i "s/STACK_NAME/$${STACK_NAME}/g" $${COMPOSE_FILE}
-      - cat $${COMPOSE_FILE}
+      - echo REGISTRY_HOST $${REGISTRY_HOST}
+      - echo REGISTRY_GROUP $${REGISTRY_GROUP}
       - echo ----------
       - set -a; . $${ENV_FILE}
       - docker compose -f $${COMPOSE_FILE} build --force-rm
-      - echo "$${REGISTRY_USER}"
-      - echo "$${REGISTRY_PASS}"
-      - echo $${REGISTRY_HOST}
       - docker login --username "$${REGISTRY_USER}" --password "$${REGISTRY_PASS}" $${REGISTRY_HOST}
-#      - docker compose -f $${COMPOSE_FILE} push
+      - docker compose -f $${COMPOSE_FILE} push
 #      - docker stack deploy -c $${COMPOSE_FILE} --with-registry-auth --resolve-image always $${STACK_NAME}
 
 #  - name: "Prod Deploy"
