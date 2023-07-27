@@ -24,12 +24,12 @@ steps:
       - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
       - export ENV_NAME=$(if [ "$DRONE_DEPLOY_TO" = prod ];then echo 'prod';else echo 'dev';fi)
       - echo ENV_NAME $${ENV_NAME}
-      - echo 'ENV_NAME=$${ENV_NAME}' >> ./.environment
-      - export TRAEFIK_HOST=$(if [ "$DRONE_DEPLOY_TO" = prod ];then echo '`prod-test.cssnr.com`';else echo '`dev-test.cssnr.com`';fi)
+      - echo "ENV_NAME=$${ENV_NAME}" >> ./.environment
+      - export TRAEFIK_HOST=$(if [ "$DRONE_DEPLOY_TO" = prod ];then echo 'prod-test.cssnr.com';else echo 'dev-test.cssnr.com';fi)
       - echo TRAEFIK_HOST $${TRAEFIK_HOST}
-      - echo 'TRAEFIK_HOST=$${TRAEFIK_HOST}' >> ./.environment
-      - echo 'STACK_NAME=$${ENV_NAME}_$${DRONE_REPO_OWNER}_$${DRONE_REPO_NAME}' >> ./.environment
-      - echo 'VERSION=$${DRONE_REPO_BRANCH}' >> ./.environment
+      - echo "TRAEFIK_HOST=$${TRAEFIK_HOST}" >> ./.environment
+      - echo "STACK_NAME=$${ENV_NAME}_$${DRONE_REPO_OWNER}_$${DRONE_REPO_NAME}" >> ./.environment
+      - echo "VERSION=$DRONE_REPO_BRANCH" >> ./.environment
 
   - name: "Service Configs"
     image: alpine/git
