@@ -83,6 +83,8 @@ steps:
       - echo ----------
       - export ENV_FILE=$${CONFIG_PATH}
       - echo ENV_FILE $${ENV_FILE}
+      - echo ----------
+      - sed -i "s/STACK_NAME/$${STACK_NAME}/g" $${COMPOSE_FILE}
 
 #  - name: "Prod Deploy"
 #    image: ubuntu:latest
