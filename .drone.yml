@@ -22,14 +22,14 @@ steps:
     image: ubuntu
     commands:
       - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
-#      - export ENV_NAME=$(if [ "$DRONE_DEPLOY_TO" = prod ];then echo 'prod';else echo 'dev';fi)
-#      - echo ENV_NAME $${ENV_NAME}
-#      - echo "ENV_NAME=$${ENV_NAME}" >> ./.environment
-#      - export TRAEFIK_HOST=$(if [ "$DRONE_DEPLOY_TO" = prod ];then echo 'prod-test.cssnr.com';else echo 'dev-test.cssnr.com';fi)
-#      - echo TRAEFIK_HOST $${TRAEFIK_HOST}
-#      - echo "TRAEFIK_HOST=$${TRAEFIK_HOST}" >> ./.environment
-#      - echo "STACK_NAME=$${ENV_NAME}_$${DRONE_REPO_OWNER}_$${DRONE_REPO_NAME}" >> ./.environment
-#      - echo "VERSION=$DRONE_REPO_BRANCH" >> ./.environment
+      - export ENV_NAME=$(if [ "$DRONE_DEPLOY_TO" = prod ];then echo 'prod';else echo 'dev';fi)
+      - echo ENV_NAME $${ENV_NAME}
+      - echo "ENV_NAME=$${ENV_NAME}" >> ./.environment
+      - export TRAEFIK_HOST=$(if [ "$DRONE_DEPLOY_TO" = prod ];then echo 'prod-test.cssnr.com';else echo 'dev-test.cssnr.com';fi)
+      - echo TRAEFIK_HOST $${TRAEFIK_HOST}
+      - echo "TRAEFIK_HOST=$${TRAEFIK_HOST}" >> ./.environment
+      - echo "STACK_NAME=$${ENV_NAME}_$${DRONE_REPO_OWNER}_$${DRONE_REPO_NAME}" >> ./.environment
+      - echo "VERSION=$DRONE_REPO_BRANCH" >> ./.environment
 
   - name: "Service Configs"
     image: alpine/git
@@ -38,25 +38,25 @@ steps:
         from_secret: SERVICE_CONFIGS_KEY
     commands:
       - set -a; . ./.environment
-#      - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
-#      - echo ENV_NAME $${ENV_NAME}
-#      - echo TRAEFIK_HOST $${TRAEFIK_HOST}
-#      - echo STACK_NAME $${STACK_NAME}
-#      - echo VERSION $${VERSION}
-#      - echo ----------
-#      - echo "$SERVICE_CONFIGS_KEY" > ./.ssh_key
-#      - chmod 0600 ./.ssh_key
-#      - mkdir service-configs
-#      - cd service-configs
-#      - git init
-#      - git config core.sshCommand "ssh -i ../.ssh_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
-#      - git remote add origin $${SERVICE_CONFIGS}
-#      - git config core.sparseCheckout true
-#      - echo "services/$DRONE_REPO_OWNER/$DRONE_REPO_NAME/$ENV_NAME/$CONFIG_FILE" >> .git/info/sparse-checkout
-#      - git pull origin master
-#      - echo  "CONFIG_PATH=service-configs/services/$DRONE_REPO_OWNER/$DRONE_REPO_NAME/$ENV_NAME/$CONFIG_FILE" >> ./.environment
-#      - echo ----------
-#      - cat "services/$DRONE_REPO_OWNER/$DRONE_REPO_NAME/$ENV_NAME/$CONFIG_FILE"
+      - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
+      - echo ENV_NAME $${ENV_NAME}
+      - echo TRAEFIK_HOST $${TRAEFIK_HOST}
+      - echo STACK_NAME $${STACK_NAME}
+      - echo VERSION $${VERSION}
+      - echo ----------
+      - echo "$SERVICE_CONFIGS_KEY" > ./.ssh_key
+      - chmod 0600 ./.ssh_key
+      - mkdir service-configs
+      - cd service-configs
+      - git init
+      - git config core.sshCommand "ssh -i ../.ssh_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
+      - git remote add origin $${SERVICE_CONFIGS}
+      - git config core.sparseCheckout true
+      - echo "services/$DRONE_REPO_OWNER/$DRONE_REPO_NAME/$ENV_NAME/$CONFIG_FILE" >> .git/info/sparse-checkout
+      - git pull origin master
+      - echo  "CONFIG_PATH=service-configs/services/$DRONE_REPO_OWNER/$DRONE_REPO_NAME/$ENV_NAME/$CONFIG_FILE" >> ./.environment
+      - echo ----------
+      - cat "services/$DRONE_REPO_OWNER/$DRONE_REPO_NAME/$ENV_NAME/$CONFIG_FILE"
 
   - name: "Dev Deploy"
     image: ubuntu:latest
@@ -64,33 +64,25 @@ steps:
       branch:
         exclude:
           - master
-#    environment:
-#      REGISTRY_USER:
-#        from_secret: REGISTRY_USER
-#      REGISTRY_PASS:
-#        from_secret: REGISTRY_PASS
+    environment:
+      REGISTRY_USER:
+        from_secret: REGISTRY_USER
+      REGISTRY_PASS:
+        from_secret: REGISTRY_PASS
     commands:
       - set -a; . ./.environment
-#      - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
-#      - echo ENV_NAME $${ENV_NAME}
-#      - echo TRAEFIK_HOST $${TRAEFIK_HOST}
-#      - echo STACK_NAME $${STACK_NAME}
-#      - echo VERSION $${VERSION}
-#      - echo CONFIG_PATH $${CONFIG_PATH}
-#      - echo ----------
-#      - echo REGISTRY_HOST $${REGISTRY_HOST}
-#      - echo COMPOSE_FILE $${COMPOSE_FILE}
-#      - echo ----------
-#      - export ENV_FILE=$${CONFIG_PATH}
-#      - echo ENV_FILE $${ENV_FILE}
-#      - echo ----------
-#      - sed -i "s/STACK_NAME/$${STACK_NAME}/g" $${COMPOSE_FILE}
-#      - echo ----------
-#      - cat $${COMPOSE_FILE}
-#      - docker compose -f $${COMPOSE_FILE} build --force-rm
-#      - docker login --username '$${REGISTRY_USER}' --password '$${REGISTRY_PASS}' $${REGISTRY_HOST}
-#      - docker compose -f $${COMPOSE_FILE} push
-#      - docker stack deploy -c $${COMPOSE_FILE} --with-registry-auth --resolve-image always ${{STACK_NAME}}
+      - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
+      - echo ENV_NAME $${ENV_NAME}
+      - echo TRAEFIK_HOST $${TRAEFIK_HOST}
+      - echo STACK_NAME $${STACK_NAME}
+      - echo VERSION $${VERSION}
+      - echo CONFIG_PATH $${CONFIG_PATH}
+      - echo ----------
+      - echo REGISTRY_HOST $${REGISTRY_HOST}
+      - echo COMPOSE_FILE $${COMPOSE_FILE}
+      - echo ----------
+      - export ENV_FILE=$${CONFIG_PATH}
+      - echo ENV_FILE $${ENV_FILE}
 
 #  - name: "Prod Deploy"
 #    image: ubuntu:latest
