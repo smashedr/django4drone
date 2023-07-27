@@ -69,15 +69,15 @@ steps:
       - echo ----------
       - cat $${COMPOSE_FILE}
 
-  - name: "Dev Deploy"
+  - name: "Deploy"
     image: docker:dind
     volumes:
       - name: docker
         path: /var/run/docker.sock
-    when:
-      branch:
-        exclude:
-          - master
+#    when:
+#      branch:
+#        exclude:
+#          - master
     environment:
       REGISTRY_USER:
         from_secret: REGISTRY_USER
