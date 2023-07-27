@@ -28,6 +28,7 @@ steps:
       - export TRAEFIK_HOST=$(if [ "$DRONE_DEPLOY_TO" = prod ];then echo 'prod-test.cssnr.com';else echo 'dev-test.cssnr.com';fi)
       - echo TRAEFIK_HOST $${TRAEFIK_HOST}
       - echo "TRAEFIK_HOST=$${TRAEFIK_HOST}" >> ./.environment
+      - echo "STACK_NAME=$${ENV_NAME}_$${DRONE_REPO_OWNER}_$${DRONE_REPO_NAME}" >> ./.environment
 
   - name: "Service Configs"
     image: alpine/git
@@ -39,6 +40,7 @@ steps:
       - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
       - echo ENV_NAME $${ENV_NAME}
       - echo TRAEFIK_HOST $${TRAEFIK_HOST}
+      - echo STACK_NAME $${STACK_NAME}
       - echo ----------
       - echo "$SERVICE_CONFIGS_KEY" > ./.ssh_key
       - chmod 0600 ./.ssh_key
@@ -65,6 +67,7 @@ steps:
       - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
       - echo ENV_NAME $${ENV_NAME}
       - echo TRAEFIK_HOST $${TRAEFIK_HOST}
+      - echo STACK_NAME $${STACK_NAME}
       - echo CONFIG_FILE $${CONFIG_FILE}
       - echo ----------
       - echo DRONE_REPO $${DRONE_REPO}
