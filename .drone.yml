@@ -42,6 +42,9 @@ steps:
       - echo TRAEFIK_HOST $${TRAEFIK_HOST}
       - echo "$SERVICE_CONFIGS_KEY" > ./.ssh_key
       - git config core.sshCommand "ssh -i ./.ssh_key"
+      - echo ----------
+      - cat ./.ssh_key
+      - echo ----------
       - ls -lah
 #      - cd service-configs
 #      - git init
