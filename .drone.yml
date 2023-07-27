@@ -71,18 +71,18 @@ steps:
 #        from_secret: REGISTRY_PASS
     commands:
       - set -a; . ./.environment
-      - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
-      - echo ENV_NAME $${ENV_NAME}
-      - echo TRAEFIK_HOST $${TRAEFIK_HOST}
-      - echo STACK_NAME $${STACK_NAME}
-      - echo VERSION $${VERSION}
-      - echo CONFIG_PATH $${CONFIG_PATH}
-      - echo ----------
-      - echo REGISTRY_HOST $${REGISTRY_HOST}
-      - echo COMPOSE_FILE $${COMPOSE_FILE}
-      - echo ----------
-      - export ENV_FILE=$${CONFIG_PATH}
-      - echo ENV_FILE $${ENV_FILE}
+#      - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
+#      - echo ENV_NAME $${ENV_NAME}
+#      - echo TRAEFIK_HOST $${TRAEFIK_HOST}
+#      - echo STACK_NAME $${STACK_NAME}
+#      - echo VERSION $${VERSION}
+#      - echo CONFIG_PATH $${CONFIG_PATH}
+#      - echo ----------
+#      - echo REGISTRY_HOST $${REGISTRY_HOST}
+#      - echo COMPOSE_FILE $${COMPOSE_FILE}
+#      - echo ----------
+#      - export ENV_FILE=$${CONFIG_PATH}
+#      - echo ENV_FILE $${ENV_FILE}
 #      - echo ----------
 #      - sed -i "s/STACK_NAME/$${STACK_NAME}/g" $${COMPOSE_FILE}
 #      - echo ----------
