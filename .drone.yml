@@ -18,8 +18,9 @@ environment:
   CONFIG_FILE: settings.env
 
 volumes:
-  - name: docker-sock
-    path: /var/run/docker.sock
+  - name: docker
+    host:
+      path: /var/run/docker.sock
 
 steps:
   - name: "Variables"
@@ -65,7 +66,7 @@ steps:
   - name: "Dev Deploy"
     image: docker:dind
     volumes:
-      - name: docker-sock
+      - name: docker
         path: /var/run/docker.sock
     when:
       branch:
