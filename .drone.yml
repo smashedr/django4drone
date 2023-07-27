@@ -32,11 +32,17 @@ steps:
 
   - name: "Service Configs"
     image: alpine/git
+    environment:
+      SERVICE_CONFIGS_KEY:
+        from_secret: SERVICE_CONFIGS_KEY
     commands:
       - set -a; . ./.environment
       - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
       - echo ENV_NAME $${ENV_NAME}
       - echo TRAEFIK_HOST $${TRAEFIK_HOST}
+      - echo "$SERVICE_CONFIGS_KEY" > ./.ssh_key
+      - git config core.sshCommand "ssh -i ./.ssh_key"
+      - ls -lah
 #      - cd service-configs
 #      - git init
 #      - git remote add origin https://github.com/smashedr/django4drone.git
@@ -70,12 +76,3 @@ steps:
 #        - promote
 #    commands:
 #      - set -a; source .environment
-#      - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
-#      - echo ENV_NAME $${ENV_NAME}
-#      - echo ----------
-#      - echo DRONE_REPO $${DRONE_REPO}
-#      - echo DRONE_REPO_NAME $${DRONE_REPO_NAME}
-#      - echo DRONE_REPO_OWNER $${DRONE_REPO_OWNER}
-#      - echo DRONE_BRANCH $${DRONE_BRANCH}
-#      - echo DRONE_COMMIT_MESSAGE $${DRONE_COMMIT_MESSAGE}
-#      - echo DRONE_REPO_LINK $${DRONE_REPO_LINK}
