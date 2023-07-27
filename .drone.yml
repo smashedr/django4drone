@@ -89,7 +89,11 @@ steps:
       - sed -i "s/STACK_NAME/$${STACK_NAME}/g" $${COMPOSE_FILE}
       - cat $${COMPOSE_FILE}
       - echo ----------
+      - set -a; . $${ENV_FILE}
       - docker compose -f $${COMPOSE_FILE} build --force-rm
+      - echo '$${REGISTRY_USER}'
+      - echo '$${REGISTRY_PASS}'
+      - echo $${REGISTRY_HOST}
       - docker login --username '$${REGISTRY_USER}' --password '$${REGISTRY_PASS}' $${REGISTRY_HOST}
 #      - docker compose -f $${COMPOSE_FILE} push
 #      - docker stack deploy -c $${COMPOSE_FILE} --with-registry-auth --resolve-image always $${STACK_NAME}
