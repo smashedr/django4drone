@@ -61,7 +61,8 @@ steps:
   - name: "Dev Deploy"
     image: docker:dind
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - name: docker-sock
+        path: /var/run/docker.sock
     when:
       branch:
         exclude:
