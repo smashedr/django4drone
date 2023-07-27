@@ -51,11 +51,11 @@ steps:
       - git config core.sshCommand "ssh -i ../.ssh_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
       - git remote add origin $${SERVICE_CONFIGS}
       - git config core.sparseCheckout true
-      - echo "services/hosted-domains/hosted-domains/test-django-app/settings.env" >> .git/info/sparse-checkout
+      - echo "services/hosted-domains/test-django-app/settings.env" >> .git/info/sparse-checkout
       - git pull origin master
       - echo ----------
       - pwd
-      - ls -lahR
+      - ls -lahR services
 
   - name: "Dev Deploy"
     image: ubuntu:latest
