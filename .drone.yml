@@ -17,17 +17,15 @@ steps:
   - name: "Variables"
     image: ubuntu
     commands:
-      - export ENV_NAME=$(if [ "${DRONE_DEPLOY_TO}" == "prod" ];then echo 'prod';else echo 'dev';fi)
+      - export ENV_NAME=$(if [ "$${DRONE_DEPLOY_TO}" == "prod" ];then echo 'prod';else echo 'dev';fi)
       - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
       - echo ENV_NAME $${ENV_NAME}
-      - echo "ENV_NAME=$${ENV_NAME}" >> .environment
+      - echo "ENV_NAME=$${ENV_NAME}" >> ./.environment
       - ls -la
 
   - name: "Service Configs"
     image: alpine/git
     commands:
-      - ls -la
-      - ls -la ./.environment
       - set -a; . ./.environment
       - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
       - echo ENV_NAME $${ENV_NAME}
@@ -45,8 +43,6 @@ steps:
         exclude:
           - master
     commands:
-      - ls -la
-      - ls -la ./.environment
       - set -a; . ./.environment
       - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
       - echo ENV_NAME $${ENV_NAME}
