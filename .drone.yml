@@ -85,6 +85,10 @@ steps:
       - echo ENV_FILE $${ENV_FILE}
       - echo ----------
       - sed -i "s/STACK_NAME/$${STACK_NAME}/g" $${COMPOSE_FILE}
+      - echo ----------
+      - cat $${COMPOSE_FILE}
+      - docker compose -f $${COMPOSE_FILE} build --force-rm
+      - docker login --username '$${REGISTRY_USER}' --password '$${REGISTRY_PASS}' $${REGISTRY_HOST}
 
 #  - name: "Prod Deploy"
 #    image: ubuntu:latest
