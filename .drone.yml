@@ -75,8 +75,6 @@ steps:
       - echo DRONE_COMMIT_MESSAGE $${DRONE_COMMIT_MESSAGE}
       - echo DRONE_REPO_LINK $${DRONE_REPO_LINK}
       - echo ----------
-      - pwd
-      - echo ----------
       - ls -la
       - echo ----------
       - ls -lah service-configs
