@@ -51,7 +51,8 @@ steps:
       - echo "services/$DRONE_REPO_OWNER/$DRONE_REPO_NAME/$ENV_NAME/$CONFIG_FILE" >> .git/info/sparse-checkout
       - git pull origin master
       - echo ----------
-      - cat "services/$DRONE_REPO_OWNER/$DRONE_REPO_NAME/$ENV_NAME/$CONFIG_FILE"
+      - ls
+      - #cat "services/$DRONE_REPO_OWNER/$DRONE_REPO_NAME/$ENV_NAME/$CONFIG_FILE"
 
   - name: "Dev Deploy"
     image: ubuntu:latest
