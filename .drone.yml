@@ -41,7 +41,8 @@ steps:
       - echo ENV_NAME $${ENV_NAME}
       - echo TRAEFIK_HOST $${TRAEFIK_HOST}
       - echo "$SERVICE_CONFIGS_KEY" > ./.ssh_key
-      - git config core.sshCommand "ssh -i ./.ssh_key -o StrictHostKeychecking=no -o UserKnownHostsFile=/dev/null"
+      - ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+      - git config core.sshCommand "ssh -i ./.ssh_key -o IdentitiesOnly=yes"
       - echo ----------
       - ls -lah
       - echo ----------
