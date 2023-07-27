@@ -14,7 +14,7 @@ environment:
   REGISTRY_GROUP: smashedr
   REGISTRY_HOST: registry.hosted-domains.com
   COMPOSE_FILE: docker-compose-swarm.yaml
-  SERVICE_CONFIGS: https://github.com/hosted-domains/service-configs
+  SERVICE_CONFIGS: git@github.com:hosted-domains/service-configs.git
   CONFIG_FILE: settings.env
 
 steps:
