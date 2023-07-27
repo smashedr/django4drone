@@ -64,11 +64,6 @@ steps:
       branch:
         exclude:
           - master
-#    environment:
-#      REGISTRY_USER:
-#        from_secret: REGISTRY_USER
-#      REGISTRY_PASS:
-#        from_secret: REGISTRY_PASS
     commands:
       - set -a; . ./.environment
       - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
@@ -83,11 +78,6 @@ steps:
       - echo ----------
       - export ENV_FILE=$${CONFIG_PATH}
       - echo ENV_FILE $${ENV_FILE}
-      - echo ----------
-      - docker compose -f $${COMPOSE_FILE} build --force-rm
-      - #docker login --username '${{REGISTRY_USER}}' --password '${{REGISTRY_PASS}}' ${REGISTRY_HOST}
-      - #docker compose -f $${COMPOSE_FILE} push
-      - #docker stack deploy -c $${COMPOSE_FILE} --with-registry-auth --resolve-image always ${{STACK_NAME}}
 
   - name: "Prod Deploy"
     image: ubuntu:latest
@@ -98,4 +88,3 @@ steps:
       - set -a; source .environment
       - echo ----------
       - echo NOT CONFIGURED
-      - exit 1
