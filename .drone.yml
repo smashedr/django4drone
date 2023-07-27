@@ -29,6 +29,7 @@ steps:
       - echo TRAEFIK_HOST $${TRAEFIK_HOST}
       - echo "TRAEFIK_HOST=$${TRAEFIK_HOST}" >> ./.environment
       - echo "STACK_NAME=$${ENV_NAME}_$${DRONE_REPO_OWNER}_$${DRONE_REPO_NAME}" >> ./.environment
+      - echo "VERSION=$DRONE_REPO_BRANCH" >> ./.environment
 
   - name: "Service Configs"
     image: alpine/git
@@ -41,6 +42,7 @@ steps:
       - echo ENV_NAME $${ENV_NAME}
       - echo TRAEFIK_HOST $${TRAEFIK_HOST}
       - echo STACK_NAME $${STACK_NAME}
+      - echo VERSION $${VERSION}
       - echo ----------
       - echo "$SERVICE_CONFIGS_KEY" > ./.ssh_key
       - chmod 0600 ./.ssh_key
@@ -52,7 +54,7 @@ steps:
       - git config core.sparseCheckout true
       - echo "services/$DRONE_REPO_OWNER/$DRONE_REPO_NAME/$ENV_NAME/$CONFIG_FILE" >> .git/info/sparse-checkout
       - git pull origin master
-      - echo  "CONFIG_FILE=service-configs/services/$DRONE_REPO_OWNER/$DRONE_REPO_NAME/$ENV_NAME/$CONFIG_FILE" >> ./.environment
+      - echo  "CONFIG_PATH=service-configs/services/$DRONE_REPO_OWNER/$DRONE_REPO_NAME/$ENV_NAME/$CONFIG_FILE" >> ./.environment
       - echo ----------
       - cat "services/$DRONE_REPO_OWNER/$DRONE_REPO_NAME/$ENV_NAME/$CONFIG_FILE"
 
@@ -68,18 +70,24 @@ steps:
       - echo ENV_NAME $${ENV_NAME}
       - echo TRAEFIK_HOST $${TRAEFIK_HOST}
       - echo STACK_NAME $${STACK_NAME}
-      - echo CONFIG_FILE $${CONFIG_FILE}
+      - echo VERSION $${VERSION}
+      - echo CONFIG_PATH $${CONFIG_PATH}
       - echo ----------
-      - echo DRONE_REPO $${DRONE_REPO}
-      - echo DRONE_REPO_NAME $${DRONE_REPO_NAME}
-      - echo DRONE_REPO_OWNER $${DRONE_REPO_OWNER}
-      - echo DRONE_BRANCH $${DRONE_BRANCH}
-      - echo DRONE_COMMIT_MESSAGE $${DRONE_COMMIT_MESSAGE}
-      - echo DRONE_REPO_LINK $${DRONE_REPO_LINK}
+      - echo REGISTRY_HOST $${REGISTRY_HOST}
+      - echo COMPOSE_FILE $${COMPOSE_FILE}
       - echo ----------
-      - ls -la
-      - echo ----------
-      - ls -lahR service-configs/services
+      - export ENV_FILE=$${CONFIG_PATH}
+      - echo ENV_FILE $${ENV_FILE}
+#      - echo DRONE_REPO $${DRONE_REPO}
+#      - echo DRONE_REPO_NAME $${DRONE_REPO_NAME}
+#      - echo DRONE_REPO_OWNER $${DRONE_REPO_OWNER}
+#      - echo DRONE_BRANCH $${DRONE_BRANCH}
+#      - echo DRONE_COMMIT_MESSAGE $${DRONE_COMMIT_MESSAGE}
+#      - echo DRONE_REPO_LINK $${DRONE_REPO_LINK}
+#      - echo ----------
+#      - ls -la
+#      - echo ----------
+#      - ls -lahR service-configs/services
 
 #  - name: "Prod Deploy"
 #    image: ubuntu:latest
