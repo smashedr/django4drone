@@ -64,11 +64,11 @@ steps:
       branch:
         exclude:
           - master
-    environment:
-      REGISTRY_USER:
-        from_secret: REGISTRY_USER
-      REGISTRY_PASS:
-        from_secret: REGISTRY_PASS
+#    environment:
+#      REGISTRY_USER:
+#        from_secret: REGISTRY_USER
+#      REGISTRY_PASS:
+#        from_secret: REGISTRY_PASS
     commands:
       - set -a; . ./.environment
       - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
