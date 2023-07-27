@@ -28,7 +28,6 @@ steps:
       - export TRAEFIK_HOST=$(if [ "$DRONE_DEPLOY_TO" = prod ];then echo 'prod-test.cssnr.com';else echo 'dev-test.cssnr.com';fi)
       - echo TRAEFIK_HOST $${TRAEFIK_HOST}
       - echo "TRAEFIK_HOST=$${TRAEFIK_HOST}" >> ./.environment
-      - ls -la
 
   - name: "Service Configs"
     image: alpine/git
@@ -40,22 +39,17 @@ steps:
       - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
       - echo ENV_NAME $${ENV_NAME}
       - echo TRAEFIK_HOST $${TRAEFIK_HOST}
+      - echo ----------
       - echo "$SERVICE_CONFIGS_KEY" > ./.ssh_key
       - chmod 0600 ./.ssh_key
-      - echo ----------
-      - ls -lah
-      - echo ----------
       - mkdir service-configs
       - cd service-configs
       - git init
       - git config core.sshCommand "ssh -i ../.ssh_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
       - git remote add origin $${SERVICE_CONFIGS}
       - git config core.sparseCheckout true
-      - echo "services/hosted-domains/test-django-app/$ENV_NAME/settings.env" >> .git/info/sparse-checkout
+      - echo "services/$DRONE_REPO_OWNER/$DRONE_REPO_NAME/$ENV_NAME/$CONFIG_FILE" >> .git/info/sparse-checkout
       - git pull origin master
-      - echo ----------
-      - pwd
-      - ls -lahR services
 
   - name: "Dev Deploy"
     image: ubuntu:latest
@@ -75,6 +69,9 @@ steps:
       - echo DRONE_BRANCH $${DRONE_BRANCH}
       - echo DRONE_COMMIT_MESSAGE $${DRONE_COMMIT_MESSAGE}
       - echo DRONE_REPO_LINK $${DRONE_REPO_LINK}
+      - echo ----------
+      - pwd
+      - ls -lahR services
 
 #  - name: "Prod Deploy"
 #    image: ubuntu:latest
