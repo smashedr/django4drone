@@ -43,15 +43,17 @@ steps:
       - echo "$SERVICE_CONFIGS_KEY" > ./.ssh_key
       - git config core.sshCommand "ssh -i ./.ssh_key"
       - echo ----------
-      - cat ./.ssh_key
-      - echo ----------
       - ls -lah
-#      - cd service-configs
-#      - git init
-#      - git remote add origin https://github.com/smashedr/django4drone.git
-#      - git config core.sparseCheckout true
-#      - echo "README.md" >> .git/info/sparse-checkout
-#      - git pull origin master
+      - echo ----------
+      - cd service-configs
+      - git init
+      - git remote add origin $${SERVICE_CONFIGS}
+      - git config core.sparseCheckout true
+      - echo "services/hosted-domains/hosted-domains/test-django-app/settings.env" >> .git/info/sparse-checkout
+      - git pull origin master
+      - echo ----------
+      - pwd
+      - ls -lahR
 
   - name: "Dev Deploy"
     image: ubuntu:latest
