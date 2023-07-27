@@ -95,8 +95,6 @@ steps:
       - sed -i "s/STACK_NAME/$${STACK_NAME}/g" $${COMPOSE_FILE}
       - cat $${COMPOSE_FILE}
       - echo ----------
-      - stat /var/run/docker.sock
-      - docker info
 #      - docker compose -f $${COMPOSE_FILE} build --force-rm
 #      - docker login --username '$${REGISTRY_USER}' --password '$${REGISTRY_PASS}' $${REGISTRY_HOST}
 #      - docker compose -f $${COMPOSE_FILE} push
