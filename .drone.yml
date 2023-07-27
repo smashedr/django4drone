@@ -19,7 +19,7 @@ environment:
 
 steps:
   - name: "Variables"
-    image: ubuntu
+    image: docker:dind
     commands:
       - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
       - export ENV_NAME=$(if [ "$DRONE_DEPLOY_TO" = prod ];then echo 'prod';else echo 'dev';fi)
@@ -59,7 +59,7 @@ steps:
       - cat "services/$DRONE_REPO_OWNER/$DRONE_REPO_NAME/$ENV_NAME/$CONFIG_FILE"
 
   - name: "Dev Deploy"
-    image: ubuntu:latest
+    image: docker:dind
     when:
       branch:
         exclude:
@@ -85,11 +85,13 @@ steps:
       - echo ENV_FILE $${ENV_FILE}
       - echo ----------
       - sed -i "s/STACK_NAME/$${STACK_NAME}/g" $${COMPOSE_FILE}
-      - echo ----------
       - cat $${COMPOSE_FILE}
-      - docker compose -f $${COMPOSE_FILE} build --force-rm
-      - docker login --username '$${REGISTRY_USER}' --password '$${REGISTRY_PASS}' $${REGISTRY_HOST}
-      - docker compose -f $${COMPOSE_FILE} push
+      - echo ----------
+      - docker info
+#      - docker compose -f $${COMPOSE_FILE} build --force-rm
+#      - docker login --username '$${REGISTRY_USER}' --password '$${REGISTRY_PASS}' $${REGISTRY_HOST}
+#      - docker compose -f $${COMPOSE_FILE} push
+#      - docker stack deploy -c $${COMPOSE_FILE} --with-registry-auth --resolve-image always $${STACK_NAME}
 
 #  - name: "Prod Deploy"
 #    image: ubuntu:latest
