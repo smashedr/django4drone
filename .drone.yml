@@ -51,7 +51,9 @@ steps:
       - echo "services/$DRONE_REPO_OWNER/$DRONE_REPO_NAME/$ENV_NAME/$CONFIG_FILE" >> .git/info/sparse-checkout
       - git pull origin master
       - echo ----------
+      - pwd
       - ls
+      - cat .git/info/sparse-checkout
       - #cat "services/$DRONE_REPO_OWNER/$DRONE_REPO_NAME/$ENV_NAME/$CONFIG_FILE"
 
   - name: "Dev Deploy"
@@ -75,9 +77,9 @@ steps:
       - echo ----------
       - pwd
       - echo ----------
-      - ls
+      - ls -la
       - echo ----------
-      - ls -lahR service-configs
+      - ls -lah service-configs
 
 #  - name: "Prod Deploy"
 #    image: ubuntu:latest
