@@ -1,8 +1,7 @@
 import logging
 import httpx
 from django.conf import settings
-from django.core.exceptions import ObjectDoesNotExist
-from django.http import JsonResponse, Http404, HttpRequest, HttpResponse
+from django.http import JsonResponse, HttpRequest
 from django.shortcuts import render, get_object_or_404
 from .forms import MessageForm, ContactForm
 from .models import Contact, Message, MyNews

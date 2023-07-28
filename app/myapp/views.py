@@ -18,7 +18,7 @@ def health_check(request):
 def flush_cache_view(request):
     logger.debug('flush_cache_view')
     flush_template_cache.delay()
-    messages.success(request, f'Cache flush success.')
+    messages.success(request, 'Cache flush success.')
     return HttpResponse(status=204)
 
 
