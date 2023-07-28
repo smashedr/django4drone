@@ -18,6 +18,7 @@ environment:
   COMPOSE_FILE: docker-compose-swarm.yaml
   CONFIG_FILE: settings.env
   SERVICE_CONFIGS: git@github.com:hosted-domains/service-configs.git
+  CONFIGS_DIR: service-configs
 
 volumes:
   - name: docker
@@ -30,13 +31,13 @@ steps:
     commands:
       - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
       - echo DRONE_SOURCE_BRANCH $${DRONE_SOURCE_BRANCH}
-      - export ENV_NAME=$(if [ "$DRONE_DEPLOY_TO" = prod ];then echo 'prod';else echo 'dev';fi)
+      - export ENV_NAME=$(if [ "$${DRONE_DEPLOY_TO}" = prod ];then echo 'prod';else echo 'dev';fi)
       - echo "ENV_NAME=$${ENV_NAME}" >> ./.environment
-      - export TRAEFIK_HOST=$(if [ "$DRONE_DEPLOY_TO" = prod ];then echo $${PROD_HOST};else echo $${DEV_HOST};fi)
+      - export TRAEFIK_HOST=$(if [ "$${DRONE_DEPLOY_TO}" = prod ];then echo $${PROD_HOST};else echo $${DEV_HOST};fi)
       - echo "TRAEFIK_HOST='$${TRAEFIK_HOST}'" >> ./.environment
-      - echo "VERSION=$DRONE_SOURCE_BRANCH" >> ./.environment
+      - echo "VERSION=$${DRONE_SOURCE_BRANCH}" >> ./.environment
       - echo "STACK_NAME=$${ENV_NAME}_$${DRONE_REPO_OWNER}_$${DRONE_REPO_NAME}" >> ./.environment
-      - echo  "ENV_FILE=service-configs/services/$DRONE_REPO_OWNER/$DRONE_REPO_NAME/$ENV_NAME/$CONFIG_FILE" >> ./.environment
+      - echo  "ENV_FILE=$${CONFIGS_DIR}/services/$${DRONE_REPO_OWNER}/$${DRONE_REPO_NAME}/$${ENV_NAME}/$${CONFIG_FILE}" >> ./.environment
 
   - name: "Service Configs"
     image: alpine/git
@@ -45,15 +46,15 @@ steps:
         from_secret: SERVICE_CONFIGS_KEY
     commands:
       - set -a; . ./.environment
-      - echo "$SERVICE_CONFIGS_KEY" > ./.ssh_key
+      - echo "$${SERVICE_CONFIGS_KEY}" > ./.ssh_key
       - chmod 0600 ./.ssh_key
-      - mkdir service-configs
-      - cd service-configs
+      - mkdir $${CONFIGS_DIR}
+      - cd $${CONFIGS_DIR}
       - git init
       - git config core.sshCommand "ssh -i ../.ssh_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
       - git remote add origin $${SERVICE_CONFIGS}
       - git config core.sparseCheckout true
-      - echo "services/$DRONE_REPO_OWNER/$DRONE_REPO_NAME/$ENV_NAME/$CONFIG_FILE" >> .git/info/sparse-checkout
+      - echo "services/$${DRONE_REPO_OWNER}/$${DRONE_REPO_NAME}/$${ENV_NAME}/$${CONFIG_FILE}" >> .git/info/sparse-checkout
       - git pull origin master
 
   - name: "Update Compose"
@@ -91,7 +92,7 @@ steps:
       - echo REGISTRY_HOST $${REGISTRY_HOST}
       - echo REGISTRY_GROUP $${REGISTRY_GROUP}
 
-      - docker compose -f $${COMPOSE_FILE} build --force-rm
-      - docker login --username "$${REGISTRY_USER}" --password "$${REGISTRY_PASS}" $${REGISTRY_HOST}
-      - docker compose -f $${COMPOSE_FILE} push
-      - docker stack deploy -c $${COMPOSE_FILE} --with-registry-auth --resolve-image always $${STACK_NAME}
+#      - docker compose -f $${COMPOSE_FILE} build --force-rm
+#      - docker login --username "$${REGISTRY_USER}" --password "$${REGISTRY_PASS}" $${REGISTRY_HOST}
+#      - docker compose -f $${COMPOSE_FILE} push
+#      - docker stack deploy -c $${COMPOSE_FILE} --with-registry-auth --resolve-image always $${STACK_NAME}
