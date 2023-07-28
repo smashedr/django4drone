@@ -29,6 +29,7 @@ steps:
     image: ubuntu
     commands:
       - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
+      - echo DRONE_REPO_BRANCH $${DRONE_REPO_BRANCH}
       - export ENV_NAME=$(if [ "$DRONE_DEPLOY_TO" = prod ];then echo 'prod';else echo 'dev';fi)
       - echo "ENV_NAME=$${ENV_NAME}" >> ./.environment
       - export TRAEFIK_HOST=$(if [ "$DRONE_DEPLOY_TO" = prod ];then echo $${PROD_HOST};else echo $${DEV_HOST};fi)
@@ -81,6 +82,7 @@ steps:
       - set -a; . $${ENV_FILE}
 
       - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
+      - echo DRONE_REPO_BRANCH $${DRONE_REPO_BRANCH}
       - echo ENV_NAME $${ENV_NAME}
       - echo TRAEFIK_HOST $${TRAEFIK_HOST}
       - echo STACK_NAME $${STACK_NAME}
