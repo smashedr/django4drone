@@ -11,8 +11,8 @@ trigger:
     - promote
 
 environment:
-  PROD_HOST: `prod-test.cssnr.com`
-  DEV_HOST: `dev-test.cssnr.com`
+  PROD_HOST: "`prod-test.cssnr.com`"
+  DEV_HOST: "`dev-test.cssnr.com`"
   REGISTRY_GROUP: smashedr
   REGISTRY_HOST: registry.hosted-domains.com
   COMPOSE_FILE: docker-compose-swarm.yaml
