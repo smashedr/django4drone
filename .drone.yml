@@ -97,7 +97,7 @@ steps:
       - echo REGISTRY_HOST $${REGISTRY_HOST}
       - echo REGISTRY_GROUP $${REGISTRY_GROUP}
 
-#      - docker compose -f $${COMPOSE_FILE} build --force-rm
-#      - docker login --username "$${REGISTRY_USER}" --password "$${REGISTRY_PASS}" $${REGISTRY_HOST}
-#      - docker compose -f $${COMPOSE_FILE} push
-#      - docker stack deploy -c $${COMPOSE_FILE} --with-registry-auth --resolve-image always $${STACK_NAME}
+      - docker compose -f $${COMPOSE_FILE} build --force-rm
+      - docker login --username "$${REGISTRY_USER}" --password "$${REGISTRY_PASS}" $${REGISTRY_HOST}
+      - docker compose -f $${COMPOSE_FILE} push
+      - docker stack deploy -c $${COMPOSE_FILE} --with-registry-auth --resolve-image always $${STACK_NAME}
