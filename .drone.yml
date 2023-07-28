@@ -62,7 +62,7 @@ steps:
       - sed -i "s/STACK_NAME/$${STACK_NAME}/g" $${COMPOSE_FILE}
       - cat $${COMPOSE_FILE}
 
-  - name: "Deploy"
+  - name: "Build and Deploy"
     image: docker:dind
     volumes:
       - name: docker
@@ -79,7 +79,7 @@ steps:
     commands:
       - set -a; . ./.environment
       - set -a; . $${ENV_FILE}
-      - echo ----------
+
       - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
       - echo ENV_NAME $${ENV_NAME}
       - echo TRAEFIK_HOST $${TRAEFIK_HOST}
@@ -89,7 +89,7 @@ steps:
       - echo COMPOSE_FILE $${COMPOSE_FILE}
       - echo REGISTRY_HOST $${REGISTRY_HOST}
       - echo REGISTRY_GROUP $${REGISTRY_GROUP}
-      - echo ----------
+
 #      - docker compose -f $${COMPOSE_FILE} build --force-rm
 #      - docker login --username "$${REGISTRY_USER}" --password "$${REGISTRY_PASS}" $${REGISTRY_HOST}
 #      - docker compose -f $${COMPOSE_FILE} push
