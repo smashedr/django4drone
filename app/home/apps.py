@@ -6,4 +6,4 @@ class HomeConfig(AppConfig):
     verbose_name = 'Home'
 
     def ready(self):
-        import home.signals
+        import home.signals  # noqa
