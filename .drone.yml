@@ -29,7 +29,6 @@ steps:
   - name: "Flake8"
     image: alpine/flake8
     commands:
-      - set -a; . ./.environment
       - flake8 .
 
   - name: "Variables"
