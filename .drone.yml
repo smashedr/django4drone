@@ -26,8 +26,14 @@ volumes:
       path: /var/run/docker.sock
 
 steps:
+  - name: "Flake8"
+    image: alpine/flake8
+    commands:
+      - set -a; . ./.environment
+      - flake8 .
+
   - name: "Variables"
-    image: ubuntu
+    image: alpine
     commands:
       - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
       - echo DRONE_SOURCE_BRANCH $${DRONE_SOURCE_BRANCH}
@@ -58,7 +64,7 @@ steps:
       - git pull origin master
 
   - name: "Update Compose"
-    image: ubuntu
+    image: alpine
     commands:
       - set -a; . ./.environment
       - sed -i "s/STACK_NAME/$${STACK_NAME}/g" $${COMPOSE_FILE}

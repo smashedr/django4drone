@@ -29,6 +29,7 @@ services:
       - app
       - flower
       - redis-commander
+      - phpmyadmin
     networks:
       - traefik-public
       - net-internal
@@ -45,7 +46,7 @@ services:
       interval: 1m
       timeout: 10s
       retries: 3
-      start_period: 5s
+      start_period: 3s
     deploy:
       mode: global
     volumes:
