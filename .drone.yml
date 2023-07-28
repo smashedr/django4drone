@@ -11,11 +11,13 @@ trigger:
     - promote
 
 environment:
+  PROD_HOST: `prod-test.cssnr.com`
+  DEV_HOST: `dev-test.cssnr.com`
   REGISTRY_GROUP: smashedr
   REGISTRY_HOST: registry.hosted-domains.com
   COMPOSE_FILE: docker-compose-swarm.yaml
-  SERVICE_CONFIGS: git@github.com:hosted-domains/service-configs.git
   CONFIG_FILE: settings.env
+  SERVICE_CONFIGS: git@github.com:hosted-domains/service-configs.git
 
 volumes:
   - name: docker
@@ -24,14 +26,13 @@ volumes:
 
 steps:
   - name: "Variables"
-    image: docker:dind
+    image: ubuntu
     commands:
       - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
-      - echo ----------
       - export ENV_NAME=$(if [ "$DRONE_DEPLOY_TO" = prod ];then echo 'prod';else echo 'dev';fi)
       - echo "ENV_NAME=$${ENV_NAME}" >> ./.environment
-      - export TRAEFIK_HOST=$(if [ "$DRONE_DEPLOY_TO" = prod ];then echo 'prod-test.cssnr.com';else echo 'dev-test.cssnr.com';fi)
-      - echo "TRAEFIK_HOST=$${TRAEFIK_HOST}" >> ./.environment
+      - export TRAEFIK_HOST=$(if [ "$DRONE_DEPLOY_TO" = prod ];then echo $${PROD_HOST};else echo $${DEV_HOST};fi)
+      - echo "TRAEFIK_HOST='$${TRAEFIK_HOST}'" >> ./.environment
       - echo "VERSION=$DRONE_REPO_BRANCH" >> ./.environment
       - echo "STACK_NAME=$${ENV_NAME}_$${DRONE_REPO_OWNER}_$${DRONE_REPO_NAME}" >> ./.environment
       - echo  "ENV_FILE=service-configs/services/$DRONE_REPO_OWNER/$DRONE_REPO_NAME/$ENV_NAME/$CONFIG_FILE" >> ./.environment
@@ -43,13 +44,6 @@ steps:
         from_secret: SERVICE_CONFIGS_KEY
     commands:
       - set -a; . ./.environment
-      - echo ----------
-      - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
-      - echo ENV_NAME $${ENV_NAME}
-      - echo TRAEFIK_HOST $${TRAEFIK_HOST}
-      - echo STACK_NAME $${STACK_NAME}
-      - echo VERSION $${VERSION}
-      - echo ----------
       - echo "$SERVICE_CONFIGS_KEY" > ./.ssh_key
       - chmod 0600 ./.ssh_key
       - mkdir service-configs
@@ -66,7 +60,6 @@ steps:
     commands:
       - set -a; . ./.environment
       - sed -i "s/STACK_NAME/$${STACK_NAME}/g" $${COMPOSE_FILE}
-      - echo ----------
       - cat $${COMPOSE_FILE}
 
   - name: "Deploy"
@@ -85,6 +78,7 @@ steps:
         from_secret: REGISTRY_PASS
     commands:
       - set -a; . ./.environment
+      - set -a; . $${ENV_FILE}
       - echo ----------
       - echo DRONE_DEPLOY_TO $${DRONE_DEPLOY_TO}
       - echo ENV_NAME $${ENV_NAME}
@@ -96,8 +90,7 @@ steps:
       - echo REGISTRY_HOST $${REGISTRY_HOST}
       - echo REGISTRY_GROUP $${REGISTRY_GROUP}
       - echo ----------
-      - set -a; . $${ENV_FILE}
-      - docker compose -f $${COMPOSE_FILE} build --force-rm
-      - docker login --username "$${REGISTRY_USER}" --password "$${REGISTRY_PASS}" $${REGISTRY_HOST}
-      - docker compose -f $${COMPOSE_FILE} push
-      - docker stack deploy -c $${COMPOSE_FILE} --with-registry-auth --resolve-image always $${STACK_NAME}
+#      - docker compose -f $${COMPOSE_FILE} build --force-rm
+#      - docker login --username "$${REGISTRY_USER}" --password "$${REGISTRY_PASS}" $${REGISTRY_HOST}
+#      - docker compose -f $${COMPOSE_FILE} push
+#      - docker stack deploy -c $${COMPOSE_FILE} --with-registry-auth --resolve-image always $${STACK_NAME}
